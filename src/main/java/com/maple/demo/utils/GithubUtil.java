@@ -23,9 +23,7 @@ public class GithubUtil {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String str= response.body().string();
-            System.out.println(str);
             String accessToken=JSON.parseObject(str,AccessTokenEntity.class).getAccess_token();
-            System.out.println("accessToken:"+accessToken);
             return accessToken;
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +42,6 @@ public class GithubUtil {
 
         try (Response response = client.newCall(request).execute()) {
             String str= response.body().string();
-            System.out.println(str);
             GithubUserEntity githubUserEntity = JSON.parseObject(str, GithubUserEntity.class);
             return githubUserEntity;
         } catch (IOException e) {

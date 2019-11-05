@@ -2,12 +2,17 @@ package com.maple.demo.comtroller;
 
 import com.maple.demo.entity.AccessTokenEntity;
 import com.maple.demo.entity.GithubUserEntity;
+import com.maple.demo.mapper.UserMapper;
+import com.maple.demo.model.User;
 import com.maple.demo.utils.GithubUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
@@ -22,9 +27,13 @@ public class AuthorizeController {
     @Value("${Github.redirect.uri}")
     private String redirectUri;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
-                           @RequestParam(name="state") String state){
+                           @RequestParam(name="state") String state,
+                           HttpSession session){
 
 
 
@@ -35,8 +44,27 @@ public class AuthorizeController {
         accessTokenEntity.setRedirect_uri(redirectUri);
         accessTokenEntity.setClient_secret(clientSecret);
         String accessToken = githubUtil.getAccessToken(accessTokenEntity);
-        GithubUserEntity user = githubUtil.getUser(accessToken);
-        System.out.println(user.getName());
-        return "index";
+        GithubUserEntity githubUser = githubUtil.getUser(accessToken);
+        if(githubUser!=null){
+            //获取登陆信息
+            //写入数据库
+            User user = new User();
+            user.setName(githubUser.getName());
+            user.setAccount_id(String.valueOf(githubUser.getId()));
+            user.setToken(UUID.randomUUID().toString());
+            user.setGmt_create(System.currentTimeMillis());
+            user.setGmt_modified(user.getGmt_create());
+            userMapper.Insert(user);
+            //写入session
+            session.setAttribute("user",githubUser);
+
+            return "redirect:/";
+
+        }else{
+            //登陆失败
+            return "redirect:/";
+        }
+
+
     }
 }

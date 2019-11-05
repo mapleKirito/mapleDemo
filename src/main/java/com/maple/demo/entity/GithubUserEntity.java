@@ -28,4 +28,5 @@ public class GithubUserEntity {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
 }

@@ -8,6 +8,7 @@
 [Bootstrap](https://v3.bootcss.com/getting-started/)
 [Github OAuth](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/)
 [OKHttp](https://square.github.io/okhttp/)
+[mybatis](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/index.html)
 
 ##工具
 [Git](https://git-scm.com/download)
