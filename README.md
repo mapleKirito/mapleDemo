@@ -15,6 +15,12 @@
 [Visual-paradigm](https://www.visual-paradigm.com)
 [Maven仓库](https://mvnrepository.com/)
 
+##控制台命令
+flyway
+~~~
+mvn flyway:migrate
+~~~
+
 ##脚本
 ~~~sql
 create table springBootDemo_user
